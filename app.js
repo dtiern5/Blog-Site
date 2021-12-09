@@ -1,6 +1,6 @@
-
 const express = require("express");
 const ejs = require("ejs");
+const _ = require("lodash");
 
 let posts = [];
 
@@ -12,23 +12,46 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render("home", {firstParagraph: homeStartingContent, posts: posts});
+  res.render("home", {
+    firstParagraph: homeStartingContent,
+    posts: posts
+  });
 });
 
 app.get("/about", (req, res) => {
-  res.render("about", {aboutStartingContent: aboutContent});
+  res.render("about", {
+    aboutStartingContent: aboutContent
+  });
 });
 
 app.get("/contact", (req, res) => {
-  res.render("contact", {contactStartingContent: contactContent});
+  res.render("contact", {
+    contactStartingContent: contactContent
+  });
 });
 
 app.get("/compose", (req, res) => {
   res.render("compose");
+});
+
+app.get("/posts/:postName", (req, res) => {
+  const requestedTitle = _.lowerCase(req.params.postName);
+
+  posts.forEach((post) => {
+    const storedTitle = _.lowerCase(post.title);
+    if (storedTitle === requestedTitle) {
+      res.render("post", {
+        postTitle: post.title,
+        postContent: post.content
+      });
+    }
+  });
 });
 
 app.post("/", (req, res) => {
@@ -40,7 +63,6 @@ app.post("/", (req, res) => {
   posts.push(post);
   res.redirect("/");
 });
-
 
 
 
