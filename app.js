@@ -32,11 +32,14 @@ app.get("/compose", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  let post = req.body.newPost;
+  const post = {
+    title: req.body.postTitle,
+    content: req.body.postBody
+  };
 
   posts.push(post);
   res.redirect("/");
-})
+});
 
 
 
