@@ -14,9 +14,16 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", {firstParagraph: homeStartingContent});
 });
 
+app.get("/about", (req, res) => {
+  res.render("about", {aboutStartingContent: aboutContent});
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact", {contactStartingContent: contactContent});
+});
 
 
 
